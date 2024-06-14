@@ -2,12 +2,21 @@ import { Link, useParams, useNavigate, Navigate } from "react-router-dom"
 import { useBookContext } from "../../context/book"
 import styles from "./style.module.css"
 // TODO: import actions
+import { ADD_BOOK, REMOVE_BOOK } from "../../context/book/actions"
 
 export default function Book() {
   const { bookId } = useParams()
   const navigate = useNavigate()
   // TODO: Use dispatch appropriately to add/remove books
+
   const [{bookSearchResults, favoriteBooks}, dispatch] = useBookContext()
+
+  const removeFavorite = () => {
+    dispatch({ action: REMOVE_BOOK, payload: bookId });
+  }
+  const addFavorite = () => {
+    dispatch({ action: ADD_BOOK, payload: book });
+  }
 
   let isFavoriteBook = false
   let book = favoriteBooks.find(book => book.id === bookId)
@@ -19,25 +28,19 @@ export default function Book() {
 
   return (
     <main>
-      <BookInfo isFavorite={isFavoriteBook} {...book}/>
+      <BookInfo isFavorite={isFavoriteBook} {...book} />
       <div className={styles.controls}>
-        {
-          isFavoriteBook
-          // TODO: add onClick function that calls dispatch to remove a book
-          ? <button>
-              Remove from Favorites
-            </button>
-          // TODO: add onClick function that calls dispatch to add a book
-          : <button>
-              Add to Favorites
-            </button>
-        }
-        <Link onClick={() => navigate(-1)}>
-          Return
-        </Link>
+        {isFavoriteBook ? (
+          // TODO: add onClick function that calls dispatch to remove a book 
+           // TODO: add onClick function that calls dispatch to add a book 
+          <button onClick={removeFavorite}>Remove from Favorites</button>) 
+          : (
+          <button onClick={addFavorite}>Add to Favorites</button>
+        )}
+        <Link onClick={() => navigate(-1)}>Return</Link>
       </div>
     </main>
-  )
+  );
 }
 
 function BookInfo({
